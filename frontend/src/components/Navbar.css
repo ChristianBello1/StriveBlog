@@ -7,6 +7,7 @@
 
 .nav-item {
   margin-right: 15px;
+  margin-top: -10px;
 }
 
 .nav-link {
@@ -51,12 +52,11 @@
 }
 
 #navbar{
-  margin-top: -30px;
-  margin-bottom:-10px;
+  margin-bottom:10px;
 }
 
 #search{
-  margin-bottom: 40px;
+  margin-bottom: -10px;
 }
 
 #profile{
@@ -66,3 +66,4 @@
 #profile:active{
   border: solid 2px #58deff;
 }
+

@@ -1,7 +1,6 @@
 // Navbar.jsx
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import SearchBar from "./SearchBar";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getUserData } from "../services/api"; // Adjust the path as necessary
 import "./Navbar.css";
@@ -9,6 +8,7 @@ import "./Navbar.css";
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +37,11 @@ export default function Navbar() {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     navigate("/");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    navigate(`/?title=${searchTerm}`);
   };
 
   return (
@@ -69,9 +74,16 @@ export default function Navbar() {
               </>
             )}
           </ul>
-          <form id="search" className="d-flex me-2">
-            <SearchBar />
-          </form>
+          <div id="search" className="d-flex me-2">
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Cerca post..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button onClick={handleSearch} className="search-button">Cerca</button>
+          </div>
           {isLoggedIn && (
             <ul className="navbar-nav">
               <li className="nav-item">
