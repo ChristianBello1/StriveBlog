@@ -2,16 +2,28 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { getUserData } from "../services/api"; // Adjust the path as necessary
 import "./Navbar.css";
 
 export default function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkLoginStatus = () => {
+    const checkLoginStatus = async () => {
       const token = localStorage.getItem("token");
       setIsLoggedIn(!!token);
+
+      if (token) {
+        try {
+          const userData = await getUserData();
+          setAvatarUrl(userData.avatar); // Adjust based on your API response structure
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
     };
 
     checkLoginStatus();
@@ -28,39 +40,51 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar">
-      <div className="container">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div id="navbar" className="container-fluid">
         <Link to="/" className="navbar-brand">
           Blog App
         </Link>
-        <SearchBar />
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link to="/" className="nav-link">Home</Link>
-          </li>
-          {isLoggedIn ? (
-            <>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {isLoggedIn && (
               <li className="nav-item">
                 <Link to="/create" className="nav-link">Nuovo Post</Link>
               </li>
+            )}
+            <li className="nav-item">
+              <Link to="/" className="nav-link">Home</Link>
+            </li>
+            {!isLoggedIn && (
+              <>
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link">Login</Link>
+                </li>
+                <li className="nav-item">
+                  <Link to="/register" className="nav-link">Registrati</Link>
+                </li>
+              </>
+            )}
+          </ul>
+          <form id="search" className="d-flex me-2">
+            <SearchBar />
+          </form>
+          {isLoggedIn && (
+            <ul className="navbar-nav">
               <li className="nav-item">
-                <Link to="/profile" className="nav-link">Profilo</Link>
+                <Link to="/profile" className="nav-link">
+                  <img id="profile" src={avatarUrl} alt="Profile Avatar" className="rounded-circle" style={{ width: '50px', height: '50px' }} />
+                </Link>
               </li>
               <li className="nav-item">
-                <button onClick={handleLogout} className="nav-link">Logout</button>
+                <button onClick={handleLogout} className="nav-link btn btn-link">Logout</button>
               </li>
-            </>
-          ) : (
-            <>
-              <li className="nav-item">
-                <Link to="/login" className="nav-link">Login</Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/register" className="nav-link">Registrati</Link>
-              </li>
-            </>
+            </ul>
           )}
-        </ul>
+        </div>
       </div>
     </nav>
   );

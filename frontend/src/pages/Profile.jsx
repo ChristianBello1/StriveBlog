@@ -1,7 +1,8 @@
+// Profile.jsx
 import { useState, useEffect } from 'react';
 import { getUserData, getPostsByUser, deletePost } from '../services/api';
 import { useNavigate } from 'react-router-dom';
-import './Home.css';
+import './Profile.css';
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -23,7 +24,6 @@ export default function Profile() {
     fetchUserData();
   }, []);
 
-  // Aggiunge un event listener per ricaricare i dati quando la finestra riceve il focus
   useEffect(() => {
     window.addEventListener('focus', fetchUserData);
     return () => window.removeEventListener('focus', fetchUserData);
@@ -39,12 +39,14 @@ export default function Profile() {
   };
 
   return (
-    <div className="profile">
+    <div className="container profile">
       {user && (
-        <div className="profile-header">
-          <h1>{user.nome} {user.cognome}</h1>
-          <h3>{user.email}</h3>
-          <img src={user.avatar} alt="Avatar" className="profile-avatar" />
+        <div className="profile-header card mb-4 p-4 text-white bg-dark">
+          <div className="d-flex flex-column align-items-center">
+            <img src={user.avatar} alt="Avatar" className="profile-avatar rounded-circle mb-3" />
+            <h1 className="mb-1">{user.nome} {user.cognome}</h1>
+            <h3 className="mb-3">{user.email}</h3>
+          </div>
         </div>
       )}
       <div className="post-grid">
@@ -53,13 +55,15 @@ export default function Profile() {
             <img src={post.cover} alt={post.title} className="post-image" />
             <div className="post-content">
               <h2>{post.title}</h2>
-              <p>{post.content}</p>
-              <button onClick={() => handleDeletePost(post._id)} className="delete-button">
-                Elimina Post
-              </button>
-              <button onClick={() => navigate(`/edit/${post._id}`)} className="edit-button">
-                Modifica Post
-              </button>
+              <p>Autore: {post.author}</p>
+              <div className="button-group">
+                <button onClick={() => handleDeletePost(post._id)} className="btn btn-danger">
+                  Elimina Post
+                </button>
+                <button onClick={() => navigate(`/edit/${post._id}`)} className="btn btn-primary">
+                  Modifica Post
+                </button>
+              </div>
             </div>
           </div>
         ))}

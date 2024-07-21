@@ -1,6 +1,7 @@
 .search-bar {
     display: flex;
     align-items: center;
+    flex-direction: row;
   }
   
   .search-input {
@@ -8,7 +9,6 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-right: 10px;
   }
   
   .search-button {

@@ -48,6 +48,11 @@ export default function EditPost() {
         ...post,
         readTime: { ...post.readTime, value: parseInt(value) },
       });
+    } else if (name === "readTimeUnit") {
+      setPost({
+        ...post,
+        readTime: { ...post.readTime, unit: value },
+      });
     } else {
       setPost({ ...post, [name]: value });
     }
@@ -87,55 +92,82 @@ export default function EditPost() {
   return (
     <div className="container">
       <h1>Modifica Post</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Titolo:
+      <form onSubmit={handleSubmit} className="create-post-form">
+        <div className="form-group">
+          <label>Titolo</label>
           <input
             type="text"
+            id="title"
             name="title"
             value={post.title}
             onChange={handleChange}
+            required
           />
-        </label>
-        <label>
-          Categoria:
+        </div>
+        <div className="form-group">
+          <label>Categoria</label>
           <input
             type="text"
+            id="category"
             name="category"
             value={post.category}
             onChange={handleChange}
+            required
           />
-        </label>
-        <label>
-          Contenuto:
+        </div>
+        <div className="form-group">
+          <label>Contenuto</label>
           <textarea
+            id="content"
             name="content"
             value={post.content}
             onChange={handleChange}
-          ></textarea>
-        </label>
-        <label>
-          Tempo di lettura:
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label>Tempo di lettura</label>
           <input
             type="number"
+            id="readTimeValue"
             name="readTimeValue"
             value={post.readTime.value}
             onChange={handleChange}
+            required
           />
           <select
+            id="readTimeUnit"
             name="readTimeUnit"
             value={post.readTime.unit}
             onChange={handleChange}
+            required
           >
             <option value="minutes">minutes</option>
             <option value="hours">hours</option>
           </select>
-        </label>
-        <label>
-          Copertina:
-          <input type="file" name="cover" onChange={handleFileChange} />
-        </label>
-        <button type="submit">Salva modifiche</button>
+        </div>
+        <div className="form-group">
+          <label>Immagine di copertina</label>
+          <input
+            type="file"
+            id="cover"
+            name="cover"
+            onChange={handleFileChange}
+          />
+        </div>
+        <div className="form-group">
+          <label>Email autore</label>
+          <input
+            type="email"
+            id="author"
+            name="author"
+            value={post.author}
+            readOnly
+          />
+        </div>
+        <button type="submit" className="submit-button">
+          Salva modifiche
+        </button>
       </form>
     </div>
   );
