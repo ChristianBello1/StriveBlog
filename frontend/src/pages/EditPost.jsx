@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPost, updatePost, getMe } from "../services/api";
 import "./CreatePost.css";
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function EditPost() {
   const { id } = useParams();
@@ -13,6 +14,7 @@ export default function EditPost() {
     author: "",
   });
   const [coverFile, setCoverFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,6 +66,7 @@ export default function EditPost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
   
     const formData = new FormData();
     Object.keys(post).forEach((key) => {
@@ -86,11 +89,14 @@ export default function EditPost() {
     } catch (error) {
       console.error("Errore nella modifica del post:", error);
       alert("Si è verificato un errore durante l'aggiornamento del post. Riprova.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="container">
+      {isLoading && <LoadingSpinner />}
       <h1>Modifica Post</h1>
       <form onSubmit={handleSubmit} className="create-post-form">
         <div className="form-group">
@@ -165,8 +171,8 @@ export default function EditPost() {
             readOnly
           />
         </div>
-        <button type="submit" className="submit-button">
-          Salva modifiche
+        <button type="submit" className="submit-button" disabled={isLoading}>
+          {isLoading ? "Caricamento..." : "Salva modifiche"}
         </button>
       </form>
     </div>

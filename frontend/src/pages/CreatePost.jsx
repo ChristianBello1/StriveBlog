@@ -1,14 +1,10 @@
-// NEW! Importa, oltre a useState anche useEffect
 import { useState, useEffect } from "react";
-// Importa useNavigate da react-router-dom per la navigazione programmatica
 import { useNavigate } from "react-router-dom";
-// NEW! Importo anche getMe dalle api
 import { createPost, getMe } from "../services/api";
-// Importa il file CSS per gli stili specifici di questo componente
 import "./CreatePost.css";
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function CreatePost() {
-  // Stato per memorizzare i dati del nuovo post
   const [post, setPost] = useState({
     title: "",
     category: "",
@@ -16,14 +12,10 @@ export default function CreatePost() {
     readTime: { value: 0, unit: "minutes" },
     author: "",
   });
-
-  // Nuovo stato per gestire il file di copertina
   const [coverFile, setCoverFile] = useState(null);
-
-  // Hook per la navigazione
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // NEW! useEffect per l'autenticazione
   useEffect(() => {
     const fetchUserEmail = async () => {
       try {
@@ -37,34 +29,27 @@ export default function CreatePost() {
     fetchUserEmail();
   }, [navigate]);
 
-  // Gestore per i cambiamenti nei campi del form
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "readTimeValue") {
-      // Gestiamo il "readTime" del post
       setPost({
         ...post,
         readTime: { ...post.readTime, value: parseInt(value) },
       });
     } else {
-      // Aggiornamento generale per gli altri campi
       setPost({ ...post, [name]: value });
     }
   };
 
-  // Nuovo gestore per il cambiamento del file di copertina
   const handleFileChange = (e) => {
     setCoverFile(e.target.files[0]);
   };
 
-  // Gestore per l'invio del form
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
-      // Creiamo un oggetto FormData per inviare sia i dati del post che il file
       const formData = new FormData();
-
-      // Aggiungiamo tutti i campi del post al FormData
       Object.keys(post).forEach((key) => {
         if (key === "readTime") {
           formData.append("readTime[value]", post.readTime.value);
@@ -74,26 +59,24 @@ export default function CreatePost() {
         }
       });
 
-      // Aggiungiamo il file di copertina se presente
       if (coverFile) {
         formData.append("cover", coverFile);
       }
 
-      // Invia i dati del post al backend
       await createPost(formData);
-      // Naviga alla rotta della home dopo la creazione del post
       navigate("/");
     } catch (error) {
       console.error("Errore nella creazione del post:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Template del componente
   return (
     <div className="container">
+      {isLoading && <LoadingSpinner />}
       <h1>Crea un nuovo post</h1>
       <form onSubmit={handleSubmit} className="create-post-form">
-        {/* Campo per il titolo */}
         <div className="form-group">
           <label>Titolo</label>
           <input
@@ -105,7 +88,6 @@ export default function CreatePost() {
             required
           />
         </div>
-        {/* Campo per la categoria */}
         <div className="form-group">
           <label>Categoria</label>
           <input
@@ -117,7 +99,6 @@ export default function CreatePost() {
             required
           />
         </div>
-        {/* Campo per il contenuto HTML */}
         <div className="form-group">
           <label>Contenuto</label>
           <textarea
@@ -128,7 +109,6 @@ export default function CreatePost() {
             required
           />
         </div>
-        {/* Campo per l'upload del file di copertina */}
         <div className="form-group">
           <label>Immagine di copertina</label>
           <input
@@ -139,7 +119,6 @@ export default function CreatePost() {
             required
           />
         </div>
-        {/* Campo per il tempo di lettura */}
         <div className="form-group">
           <label>Tempo di lettura (minuti)</label>
           <input
@@ -151,7 +130,6 @@ export default function CreatePost() {
             required
           />
         </div>
-        {/* Campo per l'email dell'autore */}
         <div className="form-group">
           <label>Email autore</label>
           <input
@@ -159,14 +137,11 @@ export default function CreatePost() {
             id="author"
             name="author"
             value={post.author}
-            // onChange={handleChange}
-            // required
             readOnly
           />
         </div>
-        {/* Pulsante di invio */}
-        <button type="submit" className="submit-button">
-          Crea il post
+        <button type="submit" className="submit-button" disabled={isLoading}>
+          {isLoading ? "Caricamento..." : "Crea il post"}
         </button>
       </form>
     </div>

@@ -93,10 +93,95 @@ router.patch("/:blogPostId/cover", cloudinaryUploader.single("cover"), async (re
 });
 
 // Route per la gestione dei commenti
-router.get("/:id/comments", async (req, res) => { /* ... */ });
-router.get("/:id/comments/:commentId", async (req, res) => { /* ... */ });
-router.post("/:id/comments", async (req, res) => { /* ... */ });
-router.put("/:id/comments/:commentId", async (req, res) => { /* ... */ });
-router.delete("/:id/comments/:commentId", async (req, res) => { /* ... */ });
+
+// GET tutti i commenti di un post
+router.get("/:id/comments", async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Blog post non trovato" });
+    res.json(post.comments);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET un singolo commento di un post
+router.get("/:id/comments/:commentId", async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Blog post non trovato" });
+    const comment = post.comments.id(req.params.commentId);
+    if (!comment) return res.status(404).json({ message: "Commento non trovato" });
+    res.json(comment);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST aggiungi un nuovo commento a un post
+router.post("/:id/comments", authMiddleware, async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Blog post non trovato" });
+    const newComment = {
+      name: req.body.name,
+      email: req.body.email,
+      content: req.body.content
+    };
+    post.comments.push(newComment);
+    await post.save();
+    res.status(201).json(newComment);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// PUT modifica un commento esistente
+router.put("/:id/comments/:commentId", authMiddleware, async (req, res) => {
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Blog post non trovato" });
+    const comment = post.comments.id(req.params.commentId);
+    if (!comment) return res.status(404).json({ message: "Commento non trovato" });
+    
+    // Verifica che l'utente che fa la richiesta sia l'autore del commento
+    if (comment.email !== req.user.email) {
+      return res.status(403).json({ message: "Non autorizzato a modificare questo commento" });
+    }
+    
+    comment.content = req.body.content;
+    await post.save();
+    res.json(comment);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// DELETE elimina un commento
+router.delete("/:id/comments/:commentId", authMiddleware, async (req, res) => {
+  console.log("Richiesta di eliminazione commento ricevuta:", req.params);
+  console.log("Utente autenticato:", req.author);
+  try {
+    const post = await BlogPost.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Blog post non trovato" });
+    
+    const comment = post.comments.id(req.params.commentId);
+    if (!comment) return res.status(404).json({ message: "Commento non trovato" });
+    
+    // Verifica che l'utente che fa la richiesta sia l'autore del commento
+    if (comment.email !== req.author.email) {
+      return res.status(403).json({ message: "Non autorizzato a eliminare questo commento" });
+    }
+    
+    // Rimuovi il commento usando il metodo pull di Mongoose
+    post.comments.pull({ _id: req.params.commentId });
+    
+    await post.save();
+    res.json({ message: "Commento eliminato" });
+  } catch (err) {
+    console.error("Errore dettagliato durante l'eliminazione del commento:", err);
+    res.status(500).json({ message: err.message });
+  }
+});
 
 export default router;

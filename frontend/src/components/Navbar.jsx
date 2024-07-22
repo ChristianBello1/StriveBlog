@@ -19,7 +19,7 @@ export default function Navbar() {
       if (token) {
         try {
           const userData = await getUserData();
-          setAvatarUrl(userData.avatar); // Adjust based on your API response structure
+          setAvatarUrl(userData.avatar);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
