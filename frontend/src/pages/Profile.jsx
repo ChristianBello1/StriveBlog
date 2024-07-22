@@ -41,7 +41,7 @@ export default function Profile() {
   return (
     <div className="container profile">
       {user && (
-        <div className="profile-header card mb-4 p-4 text-white bg-dark">
+        <div className="profile-header card mb-4 p-4 text-white">
           <div className="d-flex flex-column align-items-center">
             <img src={user.avatar} alt="Avatar" className="profile-avatar rounded-circle mb-3" />
             <h1 className="mb-1">{user.nome} {user.cognome}</h1>

@@ -46,7 +46,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav id="navbartrs" className="navbar navbar-expand-lg navbar-dark">
       <div id="navbar" className="container-fluid">
         <Link to="/" className="navbar-brand">
           <img className="logo" src={strivelogo} alt="Strive Logo" />

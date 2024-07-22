@@ -1,3 +1,7 @@
+.container {
+  padding: 20px;
+}
+
 .post-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -26,14 +30,17 @@
 
 .post-content {
   padding: 15px;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: white; /* White text color */
 }
 
 .post-content h2 {
   margin: 0 0 10px 0;
   font-size: 1.2em;
+  color: white; /* Ensure header text is white */
 }
 
 .post-content p {
   margin: 0;
-  color: #666;
+  color: white; /* Ensure paragraph text is white */
 }

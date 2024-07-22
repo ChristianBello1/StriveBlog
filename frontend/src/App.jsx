@@ -7,12 +7,14 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import EditPost from "./pages/EditPost"; // Import EditPost
+import BackgroundVideo from "./components/BackgroundVideo"; // Import BackgroundVideo
 import "./App.css";
 
 function App() {
   return (
     <Router>
       <div className="App">
+        <BackgroundVideo /> {/* Add the BackgroundVideo component */}
         <Navbar />
         <main>
           <Routes>

@@ -1,3 +1,4 @@
+/* CreatePost.css */
 .create-post-form {
   max-width: 600px;
   margin: 0 auto;
@@ -5,6 +6,7 @@
 
 .container h1 {
   text-align: center;
+  color: white; /* Make the heading text white */
 }
 
 .form-group {
@@ -14,6 +16,7 @@
 .form-group label {
   display: block;
   margin-bottom: 5px;
+  color: white; /* Make the label text white */
 }
 
 .form-group input,
@@ -22,6 +25,8 @@
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  color: white; /* White text color */
 }
 
 .form-group textarea {

@@ -1,6 +1,5 @@
-// Home.jsx
 import { useState, useEffect } from "react";
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { getPosts } from "../services/api";
 import "./Home.css";
 
@@ -23,10 +22,10 @@ export default function Home() {
 
   return (
     <div className="container">
-      <h1>Lista dei Post</h1>
+      <h1 className="text-white">Lista dei Post</h1>
       <div className="post-grid">
         {posts.map((post) => (
-          <Link to={`/post/${post._id}`} key={post._id} className="post-card">
+          <Link to={`/post/${post._id}`} key={post._id} className="post-card" id="post">
             <img src={post.cover} alt={post.title} className="post-image" />
             <div className="post-content">
               <h2>{post.title}</h2>

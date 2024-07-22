@@ -65,9 +65,9 @@ export default function PostDetail() {
       };
       console.log("Dati del commento da inviare:", commentData);
       const newCommentData = await addComment(id, commentData);
-  
+
       console.log("Risposta dal server dopo l'aggiunta del commento:", newCommentData);
-  
+
       if (!newCommentData._id) {
         newCommentData._id = Date.now().toString();
       }
@@ -121,9 +121,9 @@ export default function PostDetail() {
 
         <h3 className="comment-section-title">Commenti</h3>
         {comments.map((comment) => (
-          <div key={comment._id} className="comment">
+          <div id="comment" key={comment._id} className="comment">
+            <medium>{comment.name}</medium>
             <p>{comment.content}</p>
-            <small>Di: {comment.name}</small>
             {isLoggedIn && userData && comment.email === userData.email && (
               <button onClick={() => handleDeleteComment(comment._id)} className="delete-comment-btn">
                 Elimina
