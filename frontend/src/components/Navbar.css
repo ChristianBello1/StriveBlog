@@ -67,3 +67,10 @@
   border: solid 2px #58deff;
 }
 
+.logo{
+  height: 80px;
+}
+
+.logo:hover{
+  opacity: 0.7;
+}
