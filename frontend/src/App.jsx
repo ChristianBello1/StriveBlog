@@ -9,12 +9,13 @@ import Profile from "./pages/Profile";
 import EditPost from "./pages/EditPost"; // Import EditPost
 import BackgroundVideo from "./components/BackgroundVideo"; // Import BackgroundVideo
 import "./App.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <BackgroundVideo /> {/* Add the BackgroundVideo component */}
+        <BackgroundVideo />
         <Navbar />
         <main>
           <Routes>

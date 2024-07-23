@@ -1,6 +1,6 @@
-// Navbar.jsx
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Collapse } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getUserData } from "../services/api"; // Adjust the path as necessary
 import "./Navbar.css";
@@ -29,6 +29,15 @@ export default function Navbar() {
 
     checkLoginStatus();
     window.addEventListener("storage", checkLoginStatus);
+
+    // Initialize Bootstrap Collapse
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse) {
+      new Collapse(navbarCollapse, {
+        toggle: false
+      });
+    }
+
     return () => {
       window.removeEventListener("storage", checkLoginStatus);
     };
@@ -51,7 +60,15 @@ export default function Navbar() {
         <Link to="/" className="navbar-brand">
           <img className="logo" src={strivelogo} alt="Strive Logo" />
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button 
+          className="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarNav" 
+          aria-controls="navbarNav" 
+          aria-expanded="false" 
+          aria-label="Toggle navigation"
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
@@ -75,28 +92,30 @@ export default function Navbar() {
               </>
             )}
           </ul>
-          <div id="search" className="d-flex me-2">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Cerca post..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button onClick={handleSearch} className="search-button">Cerca</button>
+          <div className="d-lg-flex align-items-center justify-content-end flex-lg-nowrap w-100">
+            <div id="search" className="d-flex me-2 flex-grow-1 flex-lg-grow-0">
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Cerca post..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button onClick={handleSearch} className="search-button">Cerca</button>
+            </div>
+            {isLoggedIn && (
+              <ul className="navbar-nav flex-row align-items-center">
+                <li className="nav-item me-2">
+                  <Link to="/profile" className="nav-link">
+                    <img id="profile" src={avatarUrl} alt="Profile Avatar" className="rounded-circle" style={{ width: '50px', height: '50px' }} />
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <button onClick={handleLogout} className="nav-link btn btn-link">Logout</button>
+                </li>
+              </ul>
+            )}
           </div>
-          {isLoggedIn && (
-            <ul className="navbar-nav">
-              <li className="nav-item">
-                <Link to="/profile" className="nav-link">
-                  <img id="profile" src={avatarUrl} alt="Profile Avatar" className="rounded-circle" style={{ width: '50px', height: '50px' }} />
-                </Link>
-              </li>
-              <li className="nav-item">
-                <button onClick={handleLogout} className="nav-link btn btn-link">Logout</button>
-              </li>
-            </ul>
-          )}
         </div>
       </div>
     </nav>

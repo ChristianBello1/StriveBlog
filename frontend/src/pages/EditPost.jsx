@@ -73,6 +73,9 @@ export default function EditPost() {
       if (key === "readTime") {
         formData.append("readTime[value]", post.readTime.value);
         formData.append("readTime[unit]", post.readTime.unit);
+      } else if (key === "comments") {
+        // Don't append comments to FormData
+        // The server should handle comments separately
       } else {
         formData.append(key, post[key]);
       }
@@ -83,11 +86,13 @@ export default function EditPost() {
     }
   
     try {
+      console.log("Sending data:", Object.fromEntries(formData));
       const response = await updatePost(id, formData);
       console.log("Post aggiornato con successo", response);
       navigate("/profile");
     } catch (error) {
       console.error("Errore nella modifica del post:", error);
+      console.error("Response data:", error.response?.data);
       alert("Si è verificato un errore durante l'aggiornamento del post. Riprova.");
     } finally {
       setIsLoading(false);

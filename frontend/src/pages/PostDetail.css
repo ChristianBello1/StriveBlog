@@ -29,6 +29,8 @@
 .post-content {
   padding: 20px 40px;
   background-color: #f2f2f2;
+  border-radius: 20px;
+  color: #000000;
 }
 
 .comment-post-content {

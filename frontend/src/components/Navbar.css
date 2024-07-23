@@ -102,3 +102,51 @@
 .search-button:hover {
   background-color: #0056b3;
 }
+
+/* Custom styles for layout adjustments at smaller breakpoints */
+@media (max-width: 992px) {
+  /* Ensure the elements in the collapse area are aligned horizontally */
+  .collapse .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .navbar-collapse {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Target the specific group of elements (search, profile, logout) to be in a row */
+  .navbar-nav.me-auto {
+    width: 100%;
+  }
+
+  .d-lg-flex {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .d-lg-flex #search {
+    flex-grow: 1;
+  }
+
+  .d-lg-flex .navbar-nav {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .d-lg-flex .navbar-nav .nav-item {
+    margin-top: 0;
+  }
+
+  .d-lg-flex .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+  }
+
+  .d-flex .form-control {
+    width: auto; /* Adjust width to fit the layout */
+  }
+}

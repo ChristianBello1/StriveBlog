@@ -24,6 +24,7 @@ export default function PostDetail() {
     const fetchComments = async () => {
       try {
         const commentsData = await getComments(id);
+        console.log("Commenti caricati:", commentsData);
         setComments(commentsData);
       } catch (error) {
         console.error("Errore nel caricamento dei commenti:", error);
@@ -37,7 +38,6 @@ export default function PostDetail() {
         try {
           const data = await getUserData();
           setUserData(data);
-          fetchComments();
         } catch (error) {
           console.error("Errore nel recupero dei dati utente:", error);
           setIsLoggedIn(false);
@@ -48,6 +48,7 @@ export default function PostDetail() {
     };
 
     fetchPost();
+    fetchComments();
     checkAuthAndFetchUserData();
   }, [id]);
 
@@ -68,9 +69,6 @@ export default function PostDetail() {
 
       console.log("Risposta dal server dopo l'aggiunta del commento:", newCommentData);
 
-      if (!newCommentData._id) {
-        newCommentData._id = Date.now().toString();
-      }
       setComments((prevComments) => [...prevComments, newCommentData]);
       setNewComment({ content: "" });
     } catch (error) {
@@ -115,15 +113,15 @@ export default function PostDetail() {
           </span>
         </div>
         <div
-          className="comment-post-content"
+          className="post-content"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
         <h3 className="comment-section-title">Commenti</h3>
         {comments.map((comment) => (
-          <div id="comment" key={comment._id} className="comment">
-            <medium>{comment.name}</medium>
-            <p>{comment.content}</p>
+          <div key={comment._id} className="comment">
+            <strong className="text-white">{comment.name}</strong>
+            <p className="text-white">{comment.content}</p>
             {isLoggedIn && userData && comment.email === userData.email && (
               <button onClick={() => handleDeleteComment(comment._id)} className="delete-comment-btn">
                 Elimina
@@ -144,7 +142,7 @@ export default function PostDetail() {
             <button type="submit">Invia commento</button>
           </form>
         ) : (
-          <p className="no-logged-section">
+          <p className="login-prompt">
             <Link to="/login">Accedi</Link> per visualizzare o lasciare
             commenti.
           </p>
