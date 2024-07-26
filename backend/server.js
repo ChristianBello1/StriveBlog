@@ -34,7 +34,7 @@ const corsOptions = {
     const whitelist = [
       'http://localhost:5173', // Frontend in sviluppo
       'https://mern-blog-part-v.vercel.app/', // Frontend in produzione (prendere da vercel!)
-      'https://striveblog-zeb5.onrender.com' // URL del backend (prendere da render!)
+      'https://striveblog-w11m.onrender.com' // URL del backend (prendere da render!)
     ];
     
     if (process.env.NODE_ENV === 'development') {
