@@ -13,20 +13,22 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-// NEW! Approccio migliore - Controlla se esiste un token nel localStorage
     const checkLoginStatus = async () => {
       const token = localStorage.getItem("token");
       if (token) {
         try {
-          await getUserData();
+          const userData = await getUserData();
           setIsLoggedIn(true);
+          setAvatarUrl(userData.avatar || ''); // Imposta l'URL dell'avatar
         } catch (error) {
           console.error("Token non valido:", error);
           localStorage.removeItem("token");
           setIsLoggedIn(false);
+          setAvatarUrl('');
         }
       } else {
         setIsLoggedIn(false);
+        setAvatarUrl('');
       }
     };
 
